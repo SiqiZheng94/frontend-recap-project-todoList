@@ -1,5 +1,5 @@
 import {ChangeEvent, FormEvent, useState} from "react";
-import {Todo, TodoStatus} from "../App.tsx";
+import {TodoStatus} from "../App.tsx";
 import axios from "axios";
 
 
