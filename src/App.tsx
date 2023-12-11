@@ -1,11 +1,7 @@
 import {useEffect, useState} from 'react'
 import './App.css'
 import axios from "axios";
-import {Route, Routes} from "react-router-dom";
-import AddNewTodo from "./components/AddNewTodo.tsx";
-import Navigation from "./components/Navigation.tsx";
-import TodoDetails from "./components/TodoDetails.tsx";
-import Welcome from "./components/Welcome.tsx";
+import TodoColumn from "./components/TodoColumn.tsx";
 
 export type Todo = {
   id:string
@@ -14,33 +10,44 @@ export type Todo = {
 }
 export type TodoStatus= "OPEN" | "IN_PROGRESS" | "DONE"
 
+const allPossibleTodos:TodoStatus[]=["OPEN", "IN_PROGRESS", "DONE"]
+
 function App() {
 
-  const [data, setData] = useState<Todo[]>([])
+    const [data, setData] = useState<Todo[]>()
 
-  const fechData = ()=>{
+
+
+  const fetchData = ()=>{
     axios.get("/api/todo")
         .then(response=>{
-          setData(response.data)})
+          setData(response.data)
+        })
         .catch(error=>alert(error.message))
   }
 
   useEffect(()=>{
-      fechData()
+      fetchData()
   },[data])
 
 
+    // if data is undefined, null ==>falsy, then return a message but not render
+    if (!data){
+        return "Loading..."
+    }
+    // if data is fetched, then render
   return (
     <>
-        <Navigation/>
-        <Routes>
-            <Route path={"/"} element={<Welcome/>}/>
-            <Route path="/addnewtodo" element={<AddNewTodo/>}/>
-                {/*addNewTodoInData={addNewTodoInData}/>}/>*/}
-            <Route path={"/tododetails"} element={<TodoDetails todoList={data}/>}/>
-        </Routes>
-
-
+        <div className={"page"}>
+            <h1>TODOs</h1>
+            {
+                allPossibleTodos.map(status=>
+                 {
+                    const filteredTodos= data.filter(data=>data.status===status)
+                    return <TodoColumn status={status} todos={filteredTodos} getDatas={fetchData}/>
+                })
+            }
+        </div>
     </>
   )
 }
