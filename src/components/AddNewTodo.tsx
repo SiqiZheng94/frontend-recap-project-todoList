@@ -1,11 +1,9 @@
 import {ChangeEvent, FormEvent, useState} from "react";
 import {Todo, TodoStatus} from "../App.tsx";
 import axios from "axios";
-type AddNewTodoProps={
-    addNewTodoInData:(newTodo:Todo)=>void
-}
 
-export default function AddNewTodo(props:AddNewTodoProps) {
+
+export default function AddNewTodo(){
     const [inputId, setInputId] = useState<string>("")
     function changeId(event:ChangeEvent<HTMLInputElement>){
         setInputId(event.target.value)
@@ -31,7 +29,6 @@ export default function AddNewTodo(props:AddNewTodoProps) {
                 //successful POST request typically returns a status code: 200
                 .then((response)=>{
                     if(response.status===200) {
-                    props.addNewTodoInData(newTodo)
                     alert("Your new to-do item has been successfully created.\n"
                         +"id: "+inputId+"\n"
                         +"description: "+inputDescription+"\n"
