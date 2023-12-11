@@ -21,13 +21,12 @@ function App() {
   const fechData = ()=>{
     axios.get("/api/todo")
         .then(response=>{
-          console.log(response.data)
           setData(response.data)})
         .catch(error=>alert(error.message))
   }
 
   useEffect(()=>{
-    fechData()
+      fechData()
   },[])
     
     function addNewTodoInData(newTodo:Todo){

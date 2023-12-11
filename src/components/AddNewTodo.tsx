@@ -1,5 +1,6 @@
 import {ChangeEvent, FormEvent, useState} from "react";
 import {Todo, TodoStatus} from "../App.tsx";
+import axios from "axios";
 type AddNewTodoProps={
     addNewTodoInData:(newTodo:Todo)=>void
 }
@@ -19,20 +20,36 @@ export default function AddNewTodo(props:AddNewTodoProps) {
     function submitNewTodo(event:FormEvent<HTMLFormElement>){
 
         event.preventDefault()
-        if(inputId && inputStatus){
+        if(inputId && inputDescription){
             const newTodo = {
                 id:inputId,
                 description:inputDescription,
                 status: inputStatus
             }
-            props.addNewTodoInData(newTodo)
-            alert("Successful!")
-        } else {
-            alert("please give a name and a description to your new todo.")
+            axios.post("/api/todo",newTodo)
+                //To know if a POST request was successful, you can rely on the response status code that the server sends back.
+                //successful POST request typically returns a status code: 200
+                .then((response)=>{
+                    if(response.status===200) {
+                    props.addNewTodoInData(newTodo)
+                    alert("Your new to-do item has been successfully created.\n"
+                        +"id: "+inputId+"\n"
+                        +"description: "+inputDescription+"\n"
+                       )
+                    } else {
+                        alert("Post request failed! "+response.status)
+                    }
+                })
+                .catch((error)=>alert(error.message))
+    } else {
+        alert("Please provide an id and a description for the new todo.")
         }
         setInputId("")
         setInputDescription("")
     }
+
+
+
 
     return(
         <>
