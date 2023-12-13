@@ -55,22 +55,19 @@ export default function TodoCard(props:TodoCardProps){
                         {
                             props.todo.status==="OPEN"
                             ? <div></div>
-                            : {
+                            :
                                     props.todo.status==="IN_PROGRESS"
-                                ? props.todo.status="OPEN"
-                                    :props.todo.status="IN_PROGRESS"
-                            }
+                                ? <button onClick={()=>move("OPEN")}>{`<`}</button>
+                                    :<button onClick={()=>move("IN_PROGRESS")}>{`<`}</button>
                         }
-                        <button>{`<`}</button>
                         <button onClick={editSwitch}>Edit</button>
                         <button onClick={deleteThisItem}>Delete</button>
                         {
-                            props.todo.status="DONE"
+                            props.todo.status==="DONE"
                             ? <div></div>
-                                : (props.todo.status==="OPEN"
+                                : props.todo.status==="OPEN"
                                     ? <button onClick={()=>move("IN_PROGRESS")}>{`>`}</button>
                                     : <button onClick={()=>move("DONE")}>{`>`}</button>
-                                    )
                         }
 
                     </div>
