@@ -28,7 +28,7 @@ function App() {
 
   useEffect(()=>{
       fetchData()
-  },[data])
+  },[])
 
 
     // if data is undefined, null ==>falsy, then return a message but not render

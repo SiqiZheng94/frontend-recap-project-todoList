@@ -1,4 +1,4 @@
-import {Todo} from "../App.tsx";
+import {Todo, TodoStatus} from "../App.tsx";
 import axios from "axios";
 import {ChangeEvent, useState} from "react";
 type TodoCardProps={
@@ -28,6 +28,15 @@ export default function TodoCard(props:TodoCardProps){
             .then(props.getDatas)
         editSwitch()
     }
+    function move(targetStatus:TodoStatus){
+        axios.put("/api/todo/"+props.todo.id,{
+            id:props.todo.id,
+            description:props.todo.description,
+            status:targetStatus
+        } as Todo)
+            .then(props.getDatas)
+    }
+
     return(
         <>
             {edit ?
@@ -42,8 +51,29 @@ export default function TodoCard(props:TodoCardProps){
             :
                 <div className={"todo-card"}>
                     <p>{props.todo.description}</p>
-                    <button onClick={editSwitch}>Edit</button>
-                    <button onClick={deleteThisItem}>Delete</button>
+                    <div>
+                        {
+                            props.todo.status==="OPEN"
+                            ? <div></div>
+                            : {
+                                    props.todo.status==="IN_PROGRESS"
+                                ? props.todo.status="OPEN"
+                                    :props.todo.status="IN_PROGRESS"
+                            }
+                        }
+                        <button>{`<`}</button>
+                        <button onClick={editSwitch}>Edit</button>
+                        <button onClick={deleteThisItem}>Delete</button>
+                        {
+                            props.todo.status="DONE"
+                            ? <div></div>
+                                : (props.todo.status==="OPEN"
+                                    ? <button onClick={()=>move("IN_PROGRESS")}>{`>`}</button>
+                                    : <button onClick={()=>move("DONE")}>{`>`}</button>
+                                    )
+                        }
+
+                    </div>
                 </div>
             }
 

@@ -1,9 +1,8 @@
-import {ChangeEvent, FormEvent, useState} from "react";
-import {TodoStatus} from "../App.tsx";
+import {ChangeEvent, useState} from "react";
 import axios from "axios";
 
 type NewTodoCardProps={
-
+    getDatas:()=>void
 }
 
 export default function NewTodoCard(props:NewTodoCardProps) {
@@ -13,23 +12,16 @@ export default function NewTodoCard(props:NewTodoCardProps) {
     }
 
 
-    const inputStatus:TodoStatus="OPEN"
     function submitNewTodo(){
         if(inputDescription){
             const newTodo = {
                 description:inputDescription,
-                status: inputStatus
+                status: "OPEN"
             }
             axios.post("/api/todo",newTodo)
                 //To know if a POST request was successful, you can rely on the response status code that the server sends back.
                 //successful POST request typically returns a status code: 200
-                .then((response)=>{
-                    if(response.status===200) {
-                        alert("Your new to-do item has been successfully created.")
-                    } else {
-                        alert("Post request failed! "+response.status)
-                    }
-                })
+                .then(props.getDatas)
                 .catch((error)=>alert(error.message))
         } else {
             alert("Please provide a description for the new todo.")

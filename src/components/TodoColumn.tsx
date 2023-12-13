@@ -16,7 +16,7 @@ export default function TodoColumn(props:TodoColumnProps){
                     props.todos.map((todo)=><TodoCard todo={todo} key={todo.id} getDatas={props.getDatas}/>)
                 }
                 {
-                    (props.status==="OPEN") && <NewTodoCard/>
+                    (props.status==="OPEN") && <NewTodoCard getDatas={props.getDatas}/>
                 }
             </div>
 
